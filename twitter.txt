@@ -1,0 +1,46 @@
+import snscrape.modules.twitter as sntwitter
+import pandas as pd
+import streamlit as st
+import pymongo as pm
+
+
+st.title("Twitter Scraping")
+
+#set data to your preference
+scraped_word = st.text_area("Scraped Word")
+scraped_data = st.slider("Scraped Data", min_value=0, max_value=3000, value=100, step=10)
+
+
+tweets = []
+
+
+#to get tweets
+if st.button("Scrap data"): 
+  scraper = sntwitter.TwitterSearchScraper(scraped_word)
+	
+  for tweet in scraper.get_items():
+    data = [tweet.date, 
+            tweet.id, 
+            tweet.url, 
+            tweet.content, 
+            tweet.user.username, 
+            tweet.replyCount, 
+            tweet.retweetCount, 
+            tweet.lang, 
+            tweet.source, 
+            tweet.likeCount]
+    tweets. append(data)
+    if len(tweets)>scraped_data:
+        break
+
+tweet_DF = pd.DataFrame(tweets, columns =['Date','ID','URL',
+                                          'Content','User_Name',
+                                          'Replycount','Retweetcount',
+                                          'Language','Source','LikeCount'])
+
+tweet_DF
+
+
+#store the data in json and csv file
+st.download_button(label='Download CSV', data = tweet_DF.to_csv(), mime= 'text/csv')
+st.download_button(label='Download JSON', data = tweet_DF.to_csv(), mime= 'text/json')
