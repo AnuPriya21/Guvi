@@ -1,7 +1,6 @@
 import snscrape.modules.twitter as sntwitter
 import pandas as pd
 import streamlit as st
-import pymongo as pm
 
 
 st.title("Twitter Scraping")
@@ -41,6 +40,6 @@ tweet_DF = pd.DataFrame(tweets, columns =['Date','ID','URL',
 tweet_DF
 
 
-#store the data in json and csv file
+#download json and csv file
 st.download_button(label='Download CSV', data = tweet_DF.to_csv(), mime= 'text/csv')
 st.download_button(label='Download JSON', data = tweet_DF.to_csv(), mime= 'text/json')
